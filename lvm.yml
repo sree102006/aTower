@@ -1,0 +1,22 @@
+- name: reading file
+  hosts: all
+  tasks:
+    - name: Creating new VG
+      lvg:
+        vg: seenivg
+        pvs: /dev/sdc
+    - name: creating volume
+      lvol:
+        vg: seenivg
+        lv: seenilv
+        size: 1g
+    - name: new file system
+      filesystem:
+        fstype: ext3
+        dev: "/dev/mapper/seenivg-seenilv"
+    - name: mounting fs
+      mount:
+        path: /seenimnt
+        src: "/dev/mapper/seenivg-seenilv"
+        fstype: ext3
+        state: mounted
